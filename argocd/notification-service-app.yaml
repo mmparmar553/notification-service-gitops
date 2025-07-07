@@ -10,11 +10,11 @@ metadata:
 spec:
   project: default
   
-  # Source repository configuration
+  # Source repository configuration - point directly to manifests
   source:
     repoURL: https://github.com/mmparmar553/notification-service-gitops.git
     targetRevision: main
-    path: overlays/production
+    path: manifests
     
   # Destination cluster and namespace
   destination:
@@ -30,7 +30,6 @@ spec:
     syncOptions:
       - CreateNamespace=true
       - PrunePropagationPolicy=foreground
-      - PruneLast=true
     retry:
       limit: 5
       backoff:
@@ -44,6 +43,3 @@ spec:
     kind: Deployment
     jsonPointers:
     - /spec/replicas
-    
-  # Notification configuration
-  revisionHistoryLimit: 10
