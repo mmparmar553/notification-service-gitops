@@ -1,20 +1,18 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: notification-service
+  name: notification-service-gitops
   namespace: argocd
   labels:
     app: notification-service
     tier: backend
     environment: production
-  annotations:
-    argocd.argoproj.io/sync-wave: "2"
 spec:
   project: default
   
   # Source repository configuration
   source:
-    repoURL: https://github.com/YOUR_USERNAME/notification-service-gitops.git
+    repoURL: https://github.com/mmparmar553/notification-service-gitops.git
     targetRevision: main
     path: overlays/production
     
