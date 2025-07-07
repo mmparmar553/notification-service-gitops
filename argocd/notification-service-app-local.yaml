@@ -1,0 +1,29 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: notification-service-gitops
+  namespace: argocd
+  labels:
+    app: notification-service
+    tier: backend
+    environment: production
+spec:
+  project: default
+  
+  # For now, we'll use local manifests approach
+  source:
+    repoURL: https://github.com/argoproj/argocd-example-apps.git
+    targetRevision: HEAD
+    path: guestbook
+    
+  # We'll override this with our manifests
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: microservices
+    
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true

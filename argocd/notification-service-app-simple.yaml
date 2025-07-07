@@ -1,0 +1,33 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: notification-service-gitops
+  namespace: argocd
+  labels:
+    app: notification-service
+    tier: backend
+spec:
+  project: default
+  
+  # Using a demo repo for now - you can change this to your own repo later
+  source:
+    repoURL: https://github.com/manmohan-aks-demo/notification-service-gitops.git
+    targetRevision: main
+    path: manifests
+    
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: microservices
+    
+  syncPolicy:
+    automated:
+      prune: false
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
+    retry:
+      limit: 5
+      backoff:
+        duration: 5s
+        factor: 2
+        maxDuration: 3m
