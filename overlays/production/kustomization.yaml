@@ -3,10 +3,8 @@ kind: Kustomization
 
 metadata:
   name: notification-service-production
-  annotations:
-    config.kubernetes.io/local-config: "true"
 
-# Base resources
+# Base resources - use relative paths that work
 resources:
 - ../../manifests/deployment.yaml
 - ../../manifests/service.yaml
@@ -15,13 +13,17 @@ resources:
 - ../../manifests/ingress.yaml
 
 # Production-specific configurations
-patchesStrategicMerge:
-- deployment-patch.yaml
+patches:
+- path: deployment-patch.yaml
+  target:
+    kind: Deployment
+    name: notification-service
 
 # Common labels for all resources
-commonLabels:
-  environment: production
-  managed-by: argocd
+labels:
+- pairs:
+    environment: production
+    managed-by: argocd
 
 # Namespace for all resources
 namespace: microservices
@@ -30,9 +32,3 @@ namespace: microservices
 images:
 - name: acraksdemoprivatetwx8vb4d.azurecr.io/notification-service
   newTag: latest
-
-# Resource name prefix
-namePrefix: ""
-
-# Resource name suffix  
-nameSuffix: ""
